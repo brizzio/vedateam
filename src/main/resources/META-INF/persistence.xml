@@ -7,8 +7,8 @@
 	<persistence-unit name="fly">
 	
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<jta-data-source>java:/fly</jta-data-source>
-
+		<jta-data-source>java:/vedateamDS</jta-data-source>
+						
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.show_sql" value="true" />
