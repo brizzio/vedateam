@@ -11,11 +11,11 @@
 		<h:form enctype="multipart/form-data">
 		    <p:growl id="messages" showDetail="true" />
 		 
-		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/>
+		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/><br/>
 		 
-		    <p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}" />
+		    <p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}" /><br/>
 		    
-		    <h:outputText value="#{fileUploadBean.fileName}"/>
 		</h:form>
+		
 	</body>
 </html>

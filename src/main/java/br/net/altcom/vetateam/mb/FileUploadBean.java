@@ -1,65 +1,36 @@
 package br.net.altcom.vetateam.mb;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.UploadedFile;
+
+import br.net.altcom.vetateam.dao.LancamentoDao;
+import br.net.altcom.vetateam.modelo.Lancamento;
+import br.net.altcom.vetateam.util.ExcelFactory;
+import br.net.altcom.vetateam.util.ExcelSheet;
+import br.net.altcom.vetateam.util.LancamentoFactory;
 
 @ManagedBean
 public class FileUploadBean {
 
 	private UploadedFile file;
-	private String fileName = "";
 
-	public void upload() {
-		if (file == null)
-			return;
-		try {
-			XSSFWorkbook workbook = new XSSFWorkbook(file.getInputstream());
-			XSSFSheet sheet = workbook.getSheetAt(0);
-			fileName.re
-			Iterator<Row> rowIterator = sheet.rowIterator();
+	@Inject
+	private LancamentoDao lancamentoDao;
 
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				Iterator<Cell> cellIterator = row.cellIterator();
-
-				while (cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
-
-					switch (cell.getCellTypeEnum()) {
-					case STRING:
-						fileName += cell.getStringCellValue();
-						break;
-					case NUMERIC:
-						fileName += cell.getNumericCellValue();
-						break;
-					default:
-						break;
-					}
-
-				}
-			}
-
-			workbook.close();
-		} catch (IOException e) {
-			System.out.println("Erro ao abrir o arquivo");
-			return;
+	public void upload() throws IOException {
+		ExcelSheet excel = new ExcelFactory(file.getInputstream()).controi();
+		LancamentoFactory lancamentoFactory = new LancamentoFactory();
+		
+		for (Row linha : excel.getConteudo()) {
+			Lancamento lancamento = lancamentoFactory.controiLancamento(linha);
+			System.out.println(lancamento);
 		}
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+		
 	}
 
 	public UploadedFile getFile() {

@@ -8,7 +8,7 @@ public class FileUploadBeanTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }
