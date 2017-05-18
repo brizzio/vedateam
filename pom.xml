@@ -17,6 +17,11 @@
 	    <artifactId>primefaces</artifactId>  
 	    <version>5.3</version>  
 	</dependency>
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml</artifactId>
+	    <version>3.16</version>
+	</dependency>
   </dependencies>
   
   <repositories>
@@ -33,6 +38,7 @@
   </repositories>
   
   <build>
+  	<finalName>vedateam</finalName>
   	<plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
