@@ -4,7 +4,7 @@
 	version="2.1">
 
 
-	<persistence-unit name="vedateam">
+	<persistence-unit name="vedateam" transaction-type="JTA">
 	
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<jta-data-source>java:/vedateamDS</jta-data-source>
@@ -12,6 +12,7 @@
 		<class>br.net.altcom.vetateam.modelo.Produto</class>
 		<class>br.net.altcom.vetateam.modelo.Lancamento</class>
 		<class>br.net.altcom.vetateam.modelo.Cliente</class>
+		<class>br.net.altcom.vetateam.modelo.Representante</class>
 			
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
