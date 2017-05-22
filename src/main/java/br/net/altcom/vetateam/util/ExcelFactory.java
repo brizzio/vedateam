@@ -5,36 +5,27 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import br.net.altcom.vetateam.modelo.Excel;
 
 public class ExcelFactory {
 
 	private InputStream inputStream;
-	private Map<String, Sheet> sheets = new HashMap<>();
 
-	public ExcelFactory(InputStream stream) throws IOException {
+	public ExcelFactory(InputStream stream) {
 		this.inputStream = stream;
-		setSheets();
-	}
-
-	private void setSheets() throws IOException {
-
-		XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-		
-		workbook.forEach(sheet -> sheets.put(sheet.getSheetName().toLowerCase(), sheet));
-		
-		workbook.close();
 	}
 	
-	public ExcelSheet getSheetByName(String name){
+	public Excel getExcel() throws IOException, NotOfficeXmlFileException{
 		
-		Sheet sheet = this.sheets.get(name.toLowerCase());
+		Map<String, Sheet> sheets = new HashMap<>();
 		
-		if(sheet == null)
-			throw new NullPointerException("Sheet name is invalid");
-		
-		return new ExcelSheet(sheet);
+		try (XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
+			workbook.forEach(sheet -> sheets.put(sheet.getSheetName().toLowerCase(), sheet));
+			return new Excel(sheets);
+		}		
 	}
-
 }
