@@ -1,36 +1,34 @@
 package br.net.altcom.vetateam.mb;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-import javax.faces.bean.ManagedBean;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.poi.ss.usermodel.Row;
 import org.primefaces.model.UploadedFile;
 
-import br.net.altcom.vetateam.dao.LancamentoDao;
-import br.net.altcom.vetateam.modelo.Lancamento;
-import br.net.altcom.vetateam.util.ExcelFactory;
-import br.net.altcom.vetateam.util.ExcelSheet;
-import br.net.altcom.vetateam.util.LancamentoFactory;
+import br.net.altcom.vetateam.util.SalvaLancamentosNoBanco;
 
-@ManagedBean
-public class FileUploadBean {
+@Named
+@ViewScoped
+public class FileUploadBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private UploadedFile file;
-
 	@Inject
-	private LancamentoDao lancamentoDao;
+	private SalvaLancamentosNoBanco banco;
 
 	public void upload() throws IOException {
-		ExcelSheet excel = new ExcelFactory(file.getInputstream()).controi();
-		LancamentoFactory lancamentoFactory = new LancamentoFactory();
-		
-		for (Row linha : excel.getConteudo()) {
-			Lancamento lancamento = lancamentoFactory.controiLancamento(linha);
-			System.out.println(lancamento);
-		}
-		
+		banco.setFile(file.getInputstream());
+		new Thread(banco).start();
+
+		System.out.println("Funcionou");
 	}
 
 	public UploadedFile getFile() {
@@ -39,5 +37,11 @@ public class FileUploadBean {
 
 	public void setFile(UploadedFile file) {
 		this.file = file;
+	}
+
+	public int getProgress() {
+		if (banco == null)
+			return 0;
+		return banco.getProgress();
 	}
 }
