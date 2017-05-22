@@ -12,18 +12,17 @@ import org.junit.Test;
 
 public class ExcelSheetTest {
 
-	private static ExcelFactory excelFactory;
+	private static ExcelSheet excelSheet;
 
 	@BeforeClass
 	public static void pegaArquivoExcel() throws IOException{
 		InputStream stream = new FileInputStream("./FileTest/modeloDados.xlsx");
-		excelFactory = new ExcelFactory(stream);		
+		excelSheet = new ExcelFactory(stream).getExcel().getSheetByName("Planilha1");
 	}
 	
 	@Test
 	public void devePegarALinhaUmDaPlanilha() throws IOException {
 				
-		ExcelSheet excelSheet = excelFactory.getSheetByName("Planilha1");
 		Map<String, String> row = excelSheet.getRowAt(1);
 		assertNotNull(row);
 	}
@@ -31,16 +30,13 @@ public class ExcelSheetTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void naoDevePegarUmaLinhaQueSejaMaiorOuigualQueAQuantidadeTotalDeLinhasDaTabela() throws IOException {
 				
-		ExcelSheet excelSheet = excelFactory.getSheetByName("Planilha1");
 		excelSheet.getRowAt(excelSheet.getRowSize());		
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void naoDevePegarUmaLinhaQueSejaNegativa() throws IOException {
 				
-		ExcelSheet excelSheet = excelFactory.getSheetByName("Planilha1");
-		excelSheet.getRowAt(-4);
-		
+		excelSheet.getRowAt(-4);		
 	}
 
 }
