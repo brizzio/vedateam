@@ -45,4 +45,11 @@ public class Cliente {
 		this.nome = nome;
 	}
 
+	public void setRepresentante(Representante representante) {
+		this.representante = representante;
+	}
+	
+	public Representante getRepresentante() {
+		return representante;
+	}
 }
