@@ -1,40 +1,49 @@
 package br.net.altcom.vetateam.util;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.apache.poi.ss.usermodel.Row;
-
-import br.net.altcom.vetateam.dao.ProdutoDao;
-import br.net.altcom.vetateam.modelo.Cliente;
 import br.net.altcom.vetateam.modelo.Lancamento;
 import br.net.altcom.vetateam.modelo.Produto;
 
 public class LancamentoFactory {
-
-	@Inject
-	private ProdutoDao produtoDao;
 	
-	public Lancamento controiLancamento(Row linha){
+	private ExcelSheet sheet;
+
+	public LancamentoFactory(ExcelSheet sheet) {
+		this.sheet = sheet;
+	}
+	
+	public List<Lancamento> getlancamentos(){
 		
-		List<String> celulasDeUmaLinha = ExcelFactory.getCelulasDeUmaLinha(linha);
+		List<Lancamento> lancamentos = new ArrayList<>();
 		
-		Produto produto = new Produto();
-		produto.setProduto(celulasDeUmaLinha.get(3));
-		produto.setFamilia(celulasDeUmaLinha.get(4));
-		produto.setItem(celulasDeUmaLinha.get(6));
+		for (int row = 1; row < sheet.getRowSize(); row++)
+			lancamentos.add(getLancamentoAt(row));
 		
-		produtoDao.adiciona(produto);
+		return lancamentos;
+	}
+	
+	public Lancamento getLancamentoAt(int row){
 		
-		Cliente cliente = new Cliente();
-		cliente.setNome(celulasDeUmaLinha.get(7));
+		Map<String, String> rowMap = sheet.getRowAt(row);
+		Produto produto = new ProdutoFactory().getProduto(rowMap);
 		
 		Lancamento lancamento = new Lancamento();
-		lancamento.setCliente(cliente);
 		lancamento.setProduto(produto);
-		lancamento.setDate(LocalDate.now());
+		
+		BigDecimal faturamento = new BigDecimal(rowMap.get(LancamentoHeader.FATURA.getHeaderName()));
+		lancamento.setFaturamento(faturamento);
+		
+		String vendaFisicaString = rowMap.get(LancamentoHeader.VENDA_FISICA.getHeaderName());
+		vendaFisicaString = vendaFisicaString.replace(".0", "");
+		int vendaFisica = Integer.parseInt(vendaFisicaString);
+		
+		lancamento.setVendaFisica(vendaFisica);
+		
+		//falta data, representante;
 		
 		return lancamento;
 	}
