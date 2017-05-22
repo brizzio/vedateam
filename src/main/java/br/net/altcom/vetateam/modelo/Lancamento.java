@@ -1,25 +1,31 @@
 package br.net.altcom.vetateam.modelo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Lancamento {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+	@ManyToOne
+	private Cliente cliente;
 	
 	@OneToOne
-	Cliente cliente;
-	@OneToOne
-	Produto produto;
-	
-	LocalDate date;
+	private Produto produto;
+
+	private LocalDate date;
+	private BigDecimal faturamento;
+	private int vendaFisica;
 
 	public Integer getId() {
 		return id;
@@ -27,14 +33,6 @@ public class Lancamento {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 
 	public Produto getProduto() {
@@ -52,9 +50,21 @@ public class Lancamento {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	
-	@Override
-	public String toString() {
-		return "Cliente: " + cliente.getNome() + "\nProduto: " + produto.getProduto() + "\nFamilia: " + produto.getFamilia() + "\nItem: " +produto.getItem();
+
+	public BigDecimal getFaturamento() {
+		return faturamento;
 	}
+
+	public void setFaturamento(BigDecimal faturamento) {
+		this.faturamento = faturamento;
+	}
+
+	public int getVendaFisica() {
+		return vendaFisica;
+	}
+
+	public void setVendaFisica(int vendaFisica) {
+		this.vendaFisica = vendaFisica;
+	}
+
 }

@@ -11,22 +11,23 @@ import javax.persistence.OneToMany;
 @Entity
 public class Representante {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	
-	@OneToMany(mappedBy="representante")
+
+	@OneToMany(mappedBy = "representante")
 	private List<Cliente> cliente;
-	
+
 	public String getNome() {
 		return nome;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-	public void adicionaCliente(Cliente cliente){
+
+	public void adicionaCliente(Cliente cliente) {
 		this.cliente.add(cliente);
 	}
 }
