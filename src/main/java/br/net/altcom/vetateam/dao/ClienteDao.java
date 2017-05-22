@@ -4,16 +4,15 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import br.net.altcom.vetateam.modelo.Produto;
+import br.net.altcom.vetateam.modelo.Cliente;
 
 @Stateless
-public class ProdutoDao {
-	
+public class ClienteDao {
+
 	@PersistenceContext
 	private EntityManager manager;
-	
-	public void adiciona(Produto produto){
-		manager.persist(produto);
-	}
 
+	public void adiciona(Cliente cliente) {
+		manager.persist(cliente);
+	}
 }

@@ -1,18 +1,24 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.inject.Named;
+import java.util.List;
+
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import br.net.altcom.vetateam.modelo.Lancamento;
 
-@Named
+@Stateless
 public class LancamentoDao {
 
-	@PersistenceContext(unitName="fly")
+	@PersistenceContext
 	private EntityManager manager;
 
 	public void adiciona(Lancamento lancamento) {
 		manager.persist(lancamento);
+	}
+	
+	public void adicionaLista(List<Lancamento> lancamentos){
+		lancamentos.forEach(lancamento -> manager.persist(lancamento));
 	}
 }
