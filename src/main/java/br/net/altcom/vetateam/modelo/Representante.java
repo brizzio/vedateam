@@ -20,6 +20,10 @@ public class Representante {
 		this.id = id;
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+	
 	public List<Cliente> getCliente() {
 		return cliente;
 	}
