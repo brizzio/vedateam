@@ -6,13 +6,11 @@
 	<h:head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Insert title here</title>
+		
 	</h:head>
 	<h:body>
 		<h:form enctype="multipart/form-data">
-			<p:growl id="messages" showDetail="true" />
-		 
 		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/><br/>
-		
 			<p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}"/>
 		</h:form>
 		<h:form id="status">
