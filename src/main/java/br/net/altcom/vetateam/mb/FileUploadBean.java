@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import org.primefaces.model.UploadedFile;
 
-import br.net.altcom.vetateam.util.SalvaLancamentosNoBanco;
+import br.net.altcom.vetateam.util.ExcelLancamentoProcessor;
 
 @Named
 @ViewScoped
@@ -22,12 +22,11 @@ public class FileUploadBean implements Serializable {
 
 	private UploadedFile file;
 	@Inject
-	private SalvaLancamentosNoBanco banco;
+	private ExcelLancamentoProcessor banco;
 
 	public void upload() throws IOException {
 		banco.setFile(file.getInputstream());
 		new Thread(banco).start();
-
 		System.out.println("Funcionou");
 	}
 
