@@ -21,12 +21,5 @@ public class LancamentoFactoryTest {
 		InputStream stream = new FileInputStream("./FileTest/modeloDados.xlsx");
 		excelSheet = new ExcelFactory(stream).getExcel().getSheetByName("Planilha1");
 	}
-	
-	@Test
-	public void devePegarTodosOsLancamentosDeUmaPlanilhaDoExcel() {
-		LancamentoFactory lancamentoFactory = new LancamentoFactory(excelSheet);
-		List<Lancamento> getlancamentos = lancamentoFactory.getlancamentos();
-		assertEquals(excelSheet.getRowSize()-1, getlancamentos.size());
-	}
 
 }

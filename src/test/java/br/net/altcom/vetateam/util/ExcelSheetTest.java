@@ -20,23 +20,4 @@ public class ExcelSheetTest {
 		excelSheet = new ExcelFactory(stream).getExcel().getSheetByName("Planilha1");
 	}
 	
-	@Test
-	public void devePegarALinhaUmDaPlanilha() throws IOException {
-				
-		Map<String, String> row = excelSheet.getRowAt(1);
-		assertNotNull(row);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void naoDevePegarUmaLinhaQueSejaMaiorOuigualQueAQuantidadeTotalDeLinhasDaTabela() throws IOException {
-				
-		excelSheet.getRowAt(excelSheet.getRowSize());		
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void naoDevePegarUmaLinhaQueSejaNegativa() throws IOException {
-				
-		excelSheet.getRowAt(-4);		
-	}
-
 }
