@@ -9,9 +9,8 @@ public class RepresentanteFactory {
 	public Representante getRepresentante(Map<String, String> rowMap) {
 		Representante representante = new Representante();
 		
-		String idString = rowMap.get(LancamentoHeader.ID_REPRESENTANTE.getHeaderName()).replace(".0", "");
-		Integer id = new Integer(Integer.parseInt(idString));
-		representante.setId(id);
+		String idString = rowMap.get(LancamentoHeader.ID_REPRESENTANTE.getHeaderName());
+		representante.setId(new Integer(idString));
 		
 		representante.setNome(rowMap.get(LancamentoHeader.REPRESENTANTE.getHeaderName()));
 		

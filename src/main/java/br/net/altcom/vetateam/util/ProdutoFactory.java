@@ -10,9 +10,7 @@ public class ProdutoFactory {
 		Produto produto = new Produto();
 		
 		String idString = rowMap.get(LancamentoHeader.ID_ITEM.getHeaderName());
-		idString = idString.replace(".0", "");
-		Integer id = new Integer(idString);
-		produto.setId(id);
+		produto.setId(new Integer(idString));
 		
 		produto.setProduto(rowMap.get(LancamentoHeader.PRODUTO.getHeaderName()));
 		produto.setItem(rowMap.get(LancamentoHeader.ITEM.getHeaderName()));
