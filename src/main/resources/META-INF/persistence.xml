@@ -4,18 +4,23 @@
 	version="2.1">
 
 
-	<persistence-unit name="fly">
+	<persistence-unit name="vedateam" transaction-type="JTA">
 	
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<jta-data-source>java:/vedateamDS</jta-data-source>
-						
+		
+		<class>br.net.altcom.vetateam.modelo.Produto</class>
+		<class>br.net.altcom.vetateam.modelo.Lancamento</class>
+		<class>br.net.altcom.vetateam.modelo.Cliente</class>
+		<class>br.net.altcom.vetateam.modelo.Representante</class>
+			
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />
 
 			<!-- poderia ser: update, create, create-drop, none -->
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 
 		</properties>
 	</persistence-unit>

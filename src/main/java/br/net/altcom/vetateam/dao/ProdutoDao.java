@@ -1,0 +1,30 @@
+package br.net.altcom.vetateam.dao;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import br.net.altcom.vetateam.modelo.Produto;
+
+@Stateless
+public class ProdutoDao {
+
+	@PersistenceContext
+	private EntityManager manager;
+
+	public void adiciona(Produto produto) {
+		manager.persist(produto);
+	}
+
+	public Produto buscaPeloId(Produto produto) {
+		String jpql = "Select p from Produto p where p.id = :id";
+		TypedQuery<Produto> query = manager.createQuery(jpql, Produto.class);
+		try {
+			return query.setParameter("id", produto.getId()).getSingleResult();
+		} catch (javax.persistence.NoResultException e) {
+			return null;
+		}
+	}
+	
+}

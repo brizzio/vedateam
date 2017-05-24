@@ -3,19 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
-	<head>
+	<h:head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Insert title here</title>
-	</head>
-	<body>
+		
+	</h:head>
+	<h:body>
 		<h:form enctype="multipart/form-data">
-		    <p:growl id="messages" showDetail="true" />
-		 
-		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/>
-		 
-		    <p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}" />
-		    
-		    <h:outputText value="#{fileUploadBean.fileName}"/>
+		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/><br/>
+			<p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}"/>
 		</h:form>
-	</body>
+		<h:form id="status">
+			<p:poll interval="2" update="status"/>
+			<p:progressBar ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false"/>
+		</h:form>
+	</h:body>
 </html>
