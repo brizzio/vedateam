@@ -12,15 +12,17 @@ public class LoginBean {
 	private Usuario usuario = new Usuario();
 	@Inject
 	private UsuarioDao usuarioDao;
-	public void login(){
-		System.out.println(usuario.getEmail() + " - " + usuario.getSenha());
+	public String login(){
+		
 		if (!usuarioDao.isExiste(usuario))
-			return;
+			return "login?faces-redirect=true";
 		
 		Usuario usuarioBanco = usuarioDao.buscaPorEmail(usuario);
 		
 		if (usuarioBanco.getSenha().equals(usuario.getSenha())) {
-			System.out.println("Fez login");
+			return "representante?faces-redirect=true";
+		}else{
+			return "login?faces-redirect=true";
 		}
 	}
 	
