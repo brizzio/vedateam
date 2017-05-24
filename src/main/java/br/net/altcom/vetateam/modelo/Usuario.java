@@ -1,6 +1,8 @@
 package br.net.altcom.vetateam.modelo;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,9 @@ public class Usuario {
 	private Integer id;
 	private String email;
 	private String senha;
+	
+	@Enumerated(EnumType.STRING)
+	private NivelDeAcesso acesso;
 
 	public Integer getId() {
 		return id;
