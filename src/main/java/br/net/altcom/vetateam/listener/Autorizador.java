@@ -23,7 +23,7 @@ public class Autorizador implements PhaseListener {
 	public void afterPhase(PhaseEvent event) {
 		FacesContext facesContext = event.getFacesContext();
 		
-		if (facesContext.getViewRoot().getViewId().equals("login.xhtml"))
+		if (facesContext.getViewRoot().getViewId().equals("/login.xhtml"))
 			return;
 		
 		if (!usuarioLogado.isLogado()) {
