@@ -13,6 +13,7 @@
 		<class>br.net.altcom.vetateam.modelo.Lancamento</class>
 		<class>br.net.altcom.vetateam.modelo.Cliente</class>
 		<class>br.net.altcom.vetateam.modelo.Representante</class>
+		<class>br.net.altcom.vetateam.modelo.Usuario</class>
 			
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
