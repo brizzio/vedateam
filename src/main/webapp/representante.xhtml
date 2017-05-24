@@ -28,6 +28,19 @@
 	          	<h:graphicImage library="img" name="vedacit_logo.png" alt="vedacit logo"/>
 	          </a>
 	        </div>
+	        
+	        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li class="active"><a href="#">Dashboard</a></li>
+		      </ul>
+		      <ul class="nav navbar-nav navbar-right">
+		        <li>
+		        	<h:form>
+		        		<p:commandLink type="submit" value="Logout" action="#{usuarioLogadoBean.deslogar}" styleClass="btn btn-warning"/>
+		        	</h:form>
+		        </li>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
 	      </div>
 	    </nav>
 		
