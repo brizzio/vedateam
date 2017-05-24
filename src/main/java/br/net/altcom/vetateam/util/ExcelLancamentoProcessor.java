@@ -45,7 +45,7 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 	@Override
 	public void run() {
 		System.out.println("Começou a Thread");
-		String sheetName = "BI_ABr";
+		String sheetName = "planilha1";
 
 		try (ExcelFactory excelFactory = new ExcelFactory(file)) {
 
@@ -56,7 +56,7 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 			new Thread(() -> {
 
-				List<Row> plusRow = excelSheet.getPlusRow(10);
+				List<Row> plusRow = excelSheet.getPlusRow(100);
 				Row header = excelSheet.getHeader();
 
 				for (Row row : plusRow) {
