@@ -13,6 +13,7 @@ public class LoginBean {
 	@Inject
 	private UsuarioDao usuarioDao;
 	public void login(){
+		System.out.println(usuario.getEmail() + " - " + usuario.getSenha());
 		if (!usuarioDao.isExiste(usuario))
 			return;
 		
@@ -21,5 +22,9 @@ public class LoginBean {
 		if (usuarioBanco.getSenha().equals(usuario.getSenha())) {
 			System.out.println("Fez login");
 		}
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
 	}
 }
