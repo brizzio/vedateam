@@ -17,9 +17,7 @@ public class UsuarioDao {
 	}
 	
 	public boolean isExiste(Usuario usuario){
-		Usuario buscaPorEmail = buscaPorEmail(usuario);
-		System.out.println(buscaPorEmail.getRepresentante().getNome());
-		return (buscaPorEmail != null);
+		return (buscaPorEmail(usuario) != null);
 	}
 	
 	public Usuario buscaPorEmail(Usuario usuario){
