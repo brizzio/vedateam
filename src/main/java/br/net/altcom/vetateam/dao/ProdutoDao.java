@@ -25,4 +25,15 @@ public class ProdutoDao {
 		}
 	}
 	
+	public boolean isExiste(Produto produto){
+		return (buscaPeloId(produto) == null);
+	}
+	
+	public synchronized void adicionaSeNaoExiste(Produto produto){
+		if (isExiste(produto)) {
+			produto = buscaPeloId(produto);
+		}else{
+			adiciona(produto);
+		}
+	}
 }
