@@ -6,6 +6,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Usuario {
@@ -19,6 +20,9 @@ public class Usuario {
 	@Enumerated(EnumType.STRING)
 	private NivelDeAcesso acesso;
 
+	@OneToOne(mappedBy="usuario")
+	private Representante representante;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -43,4 +47,7 @@ public class Usuario {
 		this.senha = senha;
 	}
 
+	public Representante getRepresentante() {
+		return representante;
+	}
 }
