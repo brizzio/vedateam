@@ -1,16 +1,14 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.net.altcom.vetateam.modelo.Cliente;
 
-@Stateless
 public class ClienteDao {
 
-	@PersistenceContext
+	@Inject
 	private EntityManager manager;
 
 	public void adiciona(Cliente cliente) {

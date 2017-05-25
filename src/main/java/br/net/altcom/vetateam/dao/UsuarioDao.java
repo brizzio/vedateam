@@ -1,17 +1,15 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.net.altcom.vetateam.modelo.Usuario;
 
-@Stateless
 public class UsuarioDao {
-
-	@PersistenceContext
+	
+	@Inject
 	private EntityManager manager;
 	
 	public void adiciona(Usuario usuario){
@@ -19,7 +17,9 @@ public class UsuarioDao {
 	}
 	
 	public boolean isExiste(Usuario usuario){
-		return (buscaPorEmail(usuario) != null);
+		Usuario buscaPorEmail = buscaPorEmail(usuario);
+		System.out.println(buscaPorEmail.getRepresentante().getNome());
+		return (buscaPorEmail != null);
 	}
 	
 	public Usuario buscaPorEmail(Usuario usuario){
