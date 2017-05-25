@@ -10,26 +10,28 @@ import br.net.altcom.vetateam.modelo.Usuario;
 public class LoginBean {
 
 	private Usuario usuario = new Usuario();
+	
 	@Inject
 	private UsuarioDao usuarioDao;
+	
 	@Inject
 	private UsuarioLogadoBean usuarioLogado;
-	
-	public String login(){
-		
+
+	public String login() {
+
 		if (!usuarioDao.isExiste(usuario))
 			return "login?faces-redirect=true";
-		
+
 		Usuario usuarioBanco = usuarioDao.buscaPorEmail(usuario);
 		
 		if (usuarioBanco.getSenha().equals(usuario.getSenha())) {
-			usuarioLogado.logado(usuario);
+			usuarioLogado.logado(usuarioBanco);
 			return "representante?faces-redirect=true";
-		}else{
+		} else {
 			return "login?faces-redirect=true";
 		}
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
