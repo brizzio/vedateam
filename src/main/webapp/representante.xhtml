@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 	
 	<h:head>
@@ -62,13 +63,40 @@
 			  </div>
 			</div>
 			<div class="panel panel-default">
-				<form class="form-inline panel-body">
+				<h:form class="form-inline panel-body">
 				  <div class="form-group">
-				    <label for="exampleInputName2">Buscar faturamento</label>
-				    <input type="month" class="form-control" id="exampleInputName2" placeholder="Jane Doe"/>
+				    <label for="month">Buscar faturamento</label>
+				    <p:inputText id="month" type="month" value="#{representanteBean.data}" styleClass="form-control"/>
 				  </div>
-				  <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
-				</form>
+				  <p:commandButton type="submit" styleClass="btn btn-default" action="#{representanteBean.buscaLancamento}" value="Buscar"></p:commandButton>
+				  <p:commandButton type="submit" styleClass="btn btn-default" action="#{representanteBean.imprimir}" value="Buscar">
+				  	<f:ajax render="@form"></f:ajax>
+				  </p:commandButton>
+					<h:dataTable var="lan" value="#{representanteBean.lancamentos}" styleClass="table table-bordered">
+						<h:column headerText="Cliente">
+							<h:outputText value="#{lan.cliente.nome}" />
+						</h:column>
+						<h:column headerText="Produto">
+							<h:outputText value="#{lan.produto.produto}" />
+						</h:column>
+						<h:column headerText="Item">
+							<h:outputText value="#{lan.produto.item}" />
+						</h:column>
+						<h:column headerText="Familia">
+							<h:outputText value="#{lan.produto.familia}" />
+						</h:column>
+						<h:column headerText="Data">
+							<h:outputText value="#{lan.date}" />
+						</h:column>
+						<h:column headerText="Faturamento">
+							<h:outputText value="#{lan.faturamento}" />
+						</h:column>
+						<h:column headerText="Venda Fisica">
+							<h:outputText value="#{lan.vendaFisica}" />
+						</h:column>
+			
+					</h:dataTable>
+				</h:form>
 			</div>
 		</section>
 	</h:body>
