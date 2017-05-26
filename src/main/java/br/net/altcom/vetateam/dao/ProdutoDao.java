@@ -1,14 +1,16 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.inject.Inject;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.net.altcom.vetateam.modelo.Produto;
 
+@Stateless
 public class ProdutoDao {
 
-	@Inject
+	@PersistenceContext
 	private EntityManager manager;
 
 	public void adiciona(Produto produto) {
@@ -24,15 +26,15 @@ public class ProdutoDao {
 			return null;
 		}
 	}
-	
-	public boolean isExiste(Produto produto){
-		return (buscaPeloId(produto) == null);
+
+	public boolean isExiste(Produto produto) {
+		return (buscaPeloId(produto) != null);
 	}
-	
-	public synchronized void adicionaSeNaoExiste(Produto produto){
+
+	public synchronized void adicionaSeNaoExiste(Produto produto) {
 		if (isExiste(produto)) {
 			produto = buscaPeloId(produto);
-		}else{
+		} else {
 			adiciona(produto);
 		}
 	}

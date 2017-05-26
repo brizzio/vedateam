@@ -1,14 +1,16 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.inject.Inject;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.net.altcom.vetateam.modelo.Cliente;
 
+@Stateless
 public class ClienteDao {
 
-	@Inject
+	@PersistenceContext
 	private EntityManager manager;
 
 	public void adiciona(Cliente cliente) {
@@ -22,6 +24,21 @@ public class ClienteDao {
 			return query.setParameter("nome", cliente.getNome()).getSingleResult();
 		} catch (javax.persistence.NoResultException e) {
 			return null;
+		}
+	}
+	
+	public boolean isExiste(Cliente cliente) {
+		return (buscaPeloNome(cliente) != null);
+	}
+
+	public synchronized Cliente adicionaSeNaoExiste(Cliente cliente) {
+		if (isExiste(cliente)) {
+			Cliente clienteDoBanco = buscaPeloNome(cliente);
+			clienteDoBanco.setRepresentante(cliente.getRepresentante());
+			return clienteDoBanco;
+		} else {
+			adiciona(cliente);
+			return cliente;
 		}
 	}
 }

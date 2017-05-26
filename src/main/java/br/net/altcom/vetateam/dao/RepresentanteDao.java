@@ -1,14 +1,16 @@
 package br.net.altcom.vetateam.dao;
 
-import javax.inject.Inject;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import br.net.altcom.vetateam.modelo.Representante;
 
+@Stateless
 public class RepresentanteDao {
 
-	@Inject
+	@PersistenceContext
 	private EntityManager manager;
 
 	public void adiciona(Representante representante) {
@@ -22,6 +24,18 @@ public class RepresentanteDao {
 			return query.setParameter("id", representante.getId()).getSingleResult();
 		} catch (javax.persistence.NoResultException e) {
 			return null;
+		}
+	}
+	
+	public boolean isExiste(Representante representante){
+		return (buscaPeloId(representante) != null);
+	}
+	
+	public synchronized void adicionaSeNaoExiste(Representante representante){
+		if (isExiste(representante)) {
+			representante = buscaPeloId(representante);
+		}else{
+			adiciona(representante);
 		}
 	}
 }
