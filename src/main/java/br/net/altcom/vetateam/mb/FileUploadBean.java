@@ -1,6 +1,7 @@
 package br.net.altcom.vetateam.mb;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 
 import javax.faces.view.ViewScoped;
@@ -21,13 +22,16 @@ public class FileUploadBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private UploadedFile file;
+	
 	@Inject
-	private ExcelLancamentoProcessor banco;
-
-	public void upload() throws IOException {
-		banco.setFile(file.getInputstream());
-		new Thread(banco).start();
-		System.out.println("Funcionou");
+	private ExcelLancamentoProcessor processor;
+	
+	public void upload() throws IOException{
+		if (file != null) {
+			InputStream inputstream = file.getInputstream();
+			processor.setFile(inputstream);
+			new Thread(processor).start();
+		}
 	}
 
 	public UploadedFile getFile() {
@@ -38,9 +42,4 @@ public class FileUploadBean implements Serializable {
 		this.file = file;
 	}
 
-	public int getProgress() {
-		if (banco == null)
-			return 0;
-		return banco.getProgress();
-	}
 }
