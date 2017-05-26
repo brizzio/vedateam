@@ -1,6 +1,7 @@
 package br.net.altcom.vetateam.modelo;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,8 +22,8 @@ public class Lancamento {
 	
 	@OneToOne
 	private Produto produto;
-
-	private String date;
+	
+	private LocalDate date;
 	private BigDecimal faturamento;
 	private BigDecimal vendaFisica;
 
@@ -42,11 +43,11 @@ public class Lancamento {
 		this.produto = produto;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
