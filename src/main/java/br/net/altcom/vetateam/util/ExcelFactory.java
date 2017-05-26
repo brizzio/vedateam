@@ -24,7 +24,7 @@ public class ExcelFactory implements AutoCloseable {
 
 	public Excel getExcel() throws IOException, NotOfficeXmlFileException {
 
-		workbook = StreamingReader.builder().rowCacheSize(600).bufferSize(6000).open(inputStream);
+		workbook = StreamingReader.builder().rowCacheSize(50000).bufferSize(6000).open(inputStream);
 		
 		Map<String, Sheet> sheets = new HashMap<>();
 		workbook.forEach(sheet -> sheets.put(sheet.getSheetName().toLowerCase(), sheet));

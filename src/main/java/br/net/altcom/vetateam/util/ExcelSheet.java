@@ -13,6 +13,7 @@ public class ExcelSheet {
 	private int lastPositionOfTheRow;
 	private Iterator<Row> rowIterator;
 	private Row header;
+	private boolean finish;
 	
 	public ExcelSheet(Sheet sheet) {
 		this.sheet = sheet;
@@ -20,9 +21,10 @@ public class ExcelSheet {
 	
 	public void begin(){
 		rowIterator = sheet.rowIterator();
-		lastPositionOfTheRow = 0;
+		finish = false;
 		if (rowIterator.hasNext())
 			header = rowIterator.next();
+		lastPositionOfTheRow = 1;
 	}
 	
 
@@ -31,15 +33,24 @@ public class ExcelSheet {
 		List<Row> rows = new ArrayList<>();
 		amount += lastPositionOfTheRow;
 		
-		while (rowIterator.hasNext() && lastPositionOfTheRow < amount) {
-			Row rowNext = rowIterator.next();
-			rows.add(rowNext);
-			lastPositionOfTheRow++;
+		while (lastPositionOfTheRow < amount) {
+			if (rowIterator.hasNext()) {
+				Row rowNext = rowIterator.next();
+				rows.add(rowNext);
+				lastPositionOfTheRow++;
+			}else{
+				System.out.println("Finalizado");
+				finish = true;
+				break;
+			}
 		}
-		
 		return rows;
 	}
 	
+	public boolean isFinish() {
+		return finish;
+	}
+
 	public String getSheetName() {
 		return sheet.getSheetName();
 	}
