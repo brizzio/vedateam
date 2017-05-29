@@ -33,12 +33,10 @@ public class ClienteDao {
 
 	public synchronized Cliente adicionaSeNaoExiste(Cliente cliente) {
 		if (isExiste(cliente)) {
-			Cliente clienteDoBanco = buscaPeloNome(cliente);
-			clienteDoBanco.setRepresentante(cliente.getRepresentante());
-			return clienteDoBanco;
+			cliente = buscaPeloNome(cliente);
 		} else {
 			adiciona(cliente);
-			return cliente;
 		}
+		return cliente;
 	}
 }
