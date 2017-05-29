@@ -2,18 +2,55 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:head>
+		<h:outputScript library="primefaces" name="jquery/jquery.js" />
+		<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+		<h:outputScript library="js" name="bootstrap.js" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Insert title here</title>
-		<h:outputStylesheet library="css" name="reset.css"/>
+		<h:outputStylesheet library="css" name="bootstrap.css"/>
+		<h:outputStylesheet library="css" name="progresso.css"/>
 		<h:outputStylesheet library="css" name="estilo.css"/>
 	</h:head>
 	<h:body>
-		<h:form enctype="multipart/form-data">
-		    <p:growl id="messages" showDetail="true" />
-		    <p:fileUpload value="#{fileUploadBean.file}" mode="simple" skinSimple="true"/>
-		    <p:commandButton value="Submit" ajax="false" actionListener="#{fileUploadBean.upload}"/>
-		</h:form>
+		<f:facet name="last">
+		<h:outputStylesheet library="css" name="FileUpload.css"/>
+		</f:facet>
+		
+		<!-- Button trigger modal -->
+		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+		  Enviar Arquivo
+		</button>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Enviar</h4>
+		      </div>
+		      <div class="modal-body">
+		        <h:form enctype="multipart/form-data">
+				    <p:fileUpload update="@form" fileUploadListener="#{fileUploadBean.handleFileUpload}" label="Escolha" mode="advanced" 
+				    uploadLabel="Upload" styleClass="botao" allowTypes="/(\.|\/)(xlsx)$/"/>
+				    <p:dataList value="#{fileUploadBean.sheetsName}" var="sheet" type="ordered" rendered="#{not empty fileUploadBean.sheetsName}">
+				        <f:facet name="header">
+				            Planilhas
+				        </f:facet>
+				        #{sheet} <p:commandLink update="@form" type="submit" value="selecionar" action="#{fileUploadBean.processarExcel(sheet)}" styleClass="btn btn-primary"/>
+				    </p:dataList>   
+				    <p:growl id="messages" showDetail="true" />
+				</h:form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary">Save changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	</h:body>
 </html>
