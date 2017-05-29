@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+
+.botao .ui-fileupload-upload, .ui-fileupload-choose{
+	color: #fff;
+	background-color: #337ab7;
+	border-color: #2e6da4;
+}
+
+.botao .ui-fileupload-cancel{
+	color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.botao .ui-button-text{
+	padding: 0;
+}
+
+.botao .ui-fileupload-files .ui-fileupload-cancel{
+	display: none;
+}
+
+.botao .ui-fileupload-row .ui-icon-close::after{
+	content: "\e014";
+}
+
+.ui-button{
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
