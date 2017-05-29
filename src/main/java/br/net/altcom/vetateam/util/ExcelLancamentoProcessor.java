@@ -19,6 +19,8 @@ import br.net.altcom.vetateam.dao.RepresentanteDao;
 import br.net.altcom.vetateam.modelo.Cliente;
 import br.net.altcom.vetateam.modelo.Excel;
 import br.net.altcom.vetateam.modelo.Lancamento;
+import br.net.altcom.vetateam.modelo.Produto;
+import br.net.altcom.vetateam.modelo.Representante;
 
 public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
@@ -29,6 +31,8 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 	private int progress;
 	private InputStream file;
+	private String sheetName;
+	
 	@Inject
 	private ProdutoDao produtoDao;
 	@Inject
@@ -40,7 +44,6 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 	@Override
 	public void run() {
-		String sheetName = "BI_ABr";
 
 		try (ExcelFactory excelFactory = new ExcelFactory(file)) {
 
@@ -49,27 +52,41 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 			excelSheet.begin();
 			Row header = excelSheet.getHeader();
 
+			//1
 			new Thread(() -> {
-
+				int index = 0;
 				while(!excelSheet.isFinish()){
 					List<Row> plusRow = excelSheet.getPlusRow(100);
 
 					for (Row row : plusRow) {
 						Map<String, String> rowMap = mapeiaLinha(header, row);
+												
+						Representante representante = new RepresentanteFactory().getRepresentante(rowMap);
+						representanteDao.adicionaSeNaoExiste(representante);
+						
+						Cliente cliente = new ClienteFactory().getCliente(rowMap);
+						cliente.setRepresentante(representante);
+						
+						Cliente clienteDoBanco = clienteDao.adicionaSeNaoExiste(cliente);						
+						clienteDoBanco.setRepresentante(representante);
+						
+						Produto produto = new ProdutoFactory().getProduto(rowMap);
+						Produto produtoDoBanco = produtoDao.adicionaSeNaoExiste(produto);
+						
 						Lancamento lancamento = new LancamentoFactory().getLancamento(rowMap);
-						salvaNoBanco(lancamento);
+						lancamento.setCliente(clienteDoBanco);
+						lancamento.setProduto(produtoDoBanco);
+						lancamentoDao.adiciona(lancamento);
+						
+						System.out.println("Adicionado: " + index++);
 					}
 				}
-
 			}).start();
 
-			progress = 70;
 
 		} catch (NotOfficeXmlFileException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -77,11 +94,6 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 		progress = 100;
 	}
-	/*
-	 * private ExcelSheet getSheet(String sheetName) throws
-	 * NotOfficeXmlFileException, IOException { return new
-	 * ExcelFactory(file).getExcel().getSheetByName(sheetName); }
-	 */
 
 	private Map<String, String> mapeiaLinha(Row header, Row row) {
 		Map<String, String> rowMap = new HashMap<>();
@@ -91,16 +103,9 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 						cell.getStringCellValue()));
 		return rowMap;
 	}
-
-	private void salvaNoBanco(Lancamento lancamento) {
-		produtoDao.adicionaSeNaoExiste(lancamento.getProduto());
-		representanteDao.adicionaSeNaoExiste(lancamento.getCliente().getRepresentante());
-		
-		Cliente clienteDoBanco = clienteDao.adicionaSeNaoExiste(lancamento.getCliente());
-		lancamento.setCliente(clienteDoBanco);
-		
-		
-		lancamentoDao.adiciona(lancamento);
+	
+	public void setSheetName(String sheetName) {
+		this.sheetName = sheetName;
 	}
 
 	public int getProgress() {

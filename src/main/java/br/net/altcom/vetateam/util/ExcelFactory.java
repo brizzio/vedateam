@@ -2,7 +2,9 @@ package br.net.altcom.vetateam.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
@@ -32,6 +34,13 @@ public class ExcelFactory implements AutoCloseable {
 		return new Excel(sheets);
 	}
 
+	public List<String> getSheetName(){
+		List<String> sheetName = new ArrayList<>();
+		workbook = StreamingReader.builder().open(inputStream);
+		workbook.forEach(sheet -> sheetName.add(sheet.getSheetName()));
+		return sheetName;
+	}
+	
 	@Override
 	public void close() throws Exception {
 		workbook.close();
