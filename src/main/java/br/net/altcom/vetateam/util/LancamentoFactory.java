@@ -11,11 +11,17 @@ public class LancamentoFactory {
 	public Lancamento getLancamento(Map<String, String> rowMap){
 		
 		Lancamento lancamento = new Lancamento();
-						
-		BigDecimal faturamento = new BigDecimal(rowMap.get(LancamentoHeader.FATURA.getHeaderName()));
+		
+		String preco = rowMap.get(LancamentoHeader.FATURA.getHeaderName());
+		String vdaFisica = rowMap.get(LancamentoHeader.VENDA_FISICA.getHeaderName());
+		
+		preco = preco.replace(",", ".");	
+		vdaFisica = vdaFisica.replace(",", ".");
+		
+		BigDecimal faturamento = new BigDecimal(preco);
 		lancamento.setFaturamento(faturamento);
 		
-		BigDecimal vendaFisica = new BigDecimal(rowMap.get(LancamentoHeader.VENDA_FISICA.getHeaderName()));
+		BigDecimal vendaFisica = new BigDecimal(vdaFisica);
 		lancamento.setVendaFisica(vendaFisica);
 
 		int ano = Integer.parseInt(rowMap.get(LancamentoHeader.ANO.getHeaderName()));
@@ -24,6 +30,8 @@ public class LancamentoFactory {
 		LocalDate localDate = LocalDate.of(ano, mes, dia);
 		
 		lancamento.setDate(localDate);
+		
+		
 		
 		return lancamento;
 	}
