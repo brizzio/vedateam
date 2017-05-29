@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Representante {
@@ -16,6 +17,9 @@ public class Representante {
 	@OneToMany(mappedBy = "representante")
 	private List<Cliente> cliente;
 
+	@OneToOne
+	private Usuario usuario;
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -38,5 +42,13 @@ public class Representante {
 
 	public void adicionaCliente(Cliente cliente) {
 		this.cliente.add(cliente);
+	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

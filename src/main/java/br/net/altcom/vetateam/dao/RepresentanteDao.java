@@ -26,4 +26,16 @@ public class RepresentanteDao {
 			return null;
 		}
 	}
+	
+	public boolean isExiste(Representante representante){
+		return (buscaPeloId(representante) != null);
+	}
+	
+	public synchronized void adicionaSeNaoExiste(Representante representante){
+		if (isExiste(representante)) {
+			representante = buscaPeloId(representante);
+		}else{
+			adiciona(representante);
+		}
+	}
 }

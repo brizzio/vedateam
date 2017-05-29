@@ -17,14 +17,26 @@ public class ProdutoDao {
 		manager.persist(produto);
 	}
 
-	public Produto buscaPeloId(Produto produto) {
-		String jpql = "Select p from Produto p where p.id = :id";
+	public Produto buscaPeloIdProduto(Produto produto) {
+		String jpql = "Select p from Produto p where p.idProduto = :id";
 		TypedQuery<Produto> query = manager.createQuery(jpql, Produto.class);
 		try {
-			return query.setParameter("id", produto.getId()).getSingleResult();
+			return query.setParameter("id", produto.getIdProduto()).getSingleResult();
 		} catch (javax.persistence.NoResultException e) {
 			return null;
 		}
 	}
-	
+
+	public boolean isExiste(Produto produto) {
+		return (buscaPeloIdProduto(produto) != null);
+	}
+
+	public synchronized Produto adicionaSeNaoExiste(Produto produto) {
+		if (isExiste(produto)) {
+			produto = buscaPeloIdProduto(produto);
+		} else {
+			adiciona(produto);
+		}
+		return produto;
+	}
 }

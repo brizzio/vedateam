@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,7 +22,6 @@ import br.net.altcom.vetateam.modelo.Lancamento;
 import br.net.altcom.vetateam.modelo.Produto;
 import br.net.altcom.vetateam.modelo.Representante;
 
-@Named
 public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 	/**
@@ -33,95 +31,82 @@ public class ExcelLancamentoProcessor implements Runnable, Serializable {
 
 	private int progress;
 	private InputStream file;
-	@Inject
-	private LancamentoDao lancamentoDao;
+	private String sheetName;
+	
 	@Inject
 	private ProdutoDao produtoDao;
 	@Inject
+	private RepresentanteDao representanteDao;
+	@Inject
 	private ClienteDao clienteDao;
 	@Inject
-	private RepresentanteDao representanteDao;
+	private LancamentoDao lancamentoDao;
 
 	@Override
 	public void run() {
-		System.out.println("Começou a Thread");
-		String sheetName = "BI_ABr";
 
 		try (ExcelFactory excelFactory = new ExcelFactory(file)) {
 
 			Excel excel = excelFactory.getExcel();
 			ExcelSheet excelSheet = excel.getSheetByName(sheetName);
-
 			excelSheet.begin();
+			Row header = excelSheet.getHeader();
 
+			//1
 			new Thread(() -> {
+				int index = 0;
+				while(!excelSheet.isFinish()){
+					List<Row> plusRow = excelSheet.getPlusRow(100);
 
-				List<Row> plusRow = excelSheet.getPlusRow(10);
-				Row header = excelSheet.getHeader();
-
-				for (Row row : plusRow) {
-					Map<String, String> rowMap = new HashMap<>();
-					
-					row.forEach(cell -> rowMap.put(header.getCell(cell.getColumnIndex()).getStringCellValue().toLowerCase(),
-							cell.getStringCellValue()));
-					
-					Lancamento lancamento = new LancamentoFactory().getLancamento(rowMap);
-
-					
-					Produto produto = produtoDao.buscaPeloId(lancamento.getProduto());
-
-					if (produto == null) {
-						produtoDao.adiciona(lancamento.getProduto());
-					} else {
-						lancamento.setProduto(produto);
+					for (Row row : plusRow) {
+						Map<String, String> rowMap = mapeiaLinha(header, row);
+												
+						Representante representante = new RepresentanteFactory().getRepresentante(rowMap);
+						representanteDao.adicionaSeNaoExiste(representante);
+						
+						Cliente cliente = new ClienteFactory().getCliente(rowMap);
+						cliente.setRepresentante(representante);
+						
+						Cliente clienteDoBanco = clienteDao.adicionaSeNaoExiste(cliente);						
+						clienteDoBanco.setRepresentante(representante);
+						
+						Produto produto = new ProdutoFactory().getProduto(rowMap);
+						Produto produtoDoBanco = produtoDao.adicionaSeNaoExiste(produto);
+						
+						Lancamento lancamento = new LancamentoFactory().getLancamento(rowMap);
+						lancamento.setCliente(clienteDoBanco);
+						lancamento.setProduto(produtoDoBanco);
+						lancamentoDao.adiciona(lancamento);
+						
+						System.out.println("Adicionado: " + index++);
 					}
-
-					Representante representanteDoCliente = lancamento.getCliente().getRepresentante();
-
-					Representante ExisteRepresentante = representanteDao.buscaPeloId(representanteDoCliente);
-
-					if (ExisteRepresentante == null) {
-						representanteDao.adiciona(representanteDoCliente);
-					} else {
-						representanteDoCliente = ExisteRepresentante;
-					}
-
-					Cliente cliente = clienteDao.buscaPeloNome(lancamento.getCliente());
-
-					if (cliente == null) {
-						lancamento.getCliente().setRepresentante(representanteDoCliente);
-						clienteDao.adiciona(lancamento.getCliente());
-					} else {
-						cliente.setRepresentante(representanteDoCliente);
-						lancamento.setCliente(cliente);
-					}
-
-					lancamentoDao.adiciona(lancamento);
 				}
-
 			}).start();
 
-			progress = 70;
 
 		} catch (NotOfficeXmlFileException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
 		progress = 100;
-		System.out.println("Terminou a thread");
-
 	}
-	/*
-	 * private ExcelSheet getSheet(String sheetName) throws
-	 * NotOfficeXmlFileException, IOException { return new
-	 * ExcelFactory(file).getExcel().getSheetByName(sheetName); }
-	 */
+
+	private Map<String, String> mapeiaLinha(Row header, Row row) {
+		Map<String, String> rowMap = new HashMap<>();
+
+		row.forEach(
+				cell -> rowMap.put(header.getCell(cell.getColumnIndex()).getStringCellValue().toLowerCase(),
+						cell.getStringCellValue()));
+		return rowMap;
+	}
+	
+	public void setSheetName(String sheetName) {
+		this.sheetName = sheetName;
+	}
 
 	public int getProgress() {
 		return progress;

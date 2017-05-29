@@ -26,4 +26,17 @@ public class ClienteDao {
 			return null;
 		}
 	}
+	
+	public boolean isExiste(Cliente cliente) {
+		return (buscaPeloNome(cliente) != null);
+	}
+
+	public synchronized Cliente adicionaSeNaoExiste(Cliente cliente) {
+		if (isExiste(cliente)) {
+			cliente = buscaPeloNome(cliente);
+		} else {
+			adiciona(cliente);
+		}
+		return cliente;
+	}
 }
